@@ -1,7 +1,7 @@
 $.getScript("https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js");
 $.getScript("https://malsup.github.io/jquery.form.js");
 
-let apiURL = "https://api.soundxpo.com"
+let apiURL = "https://edm-vyshj.ondigitalocean.app"
 // let apiURL = "http://localhost:8080"
 
 function now() {
@@ -169,3 +169,9 @@ form__editprofile.submit(function (e) {
   }
   post(url, data, success, fail);
 });
+
+
+
+
+
+
