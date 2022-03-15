@@ -1,7 +1,7 @@
 $.getScript("https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js");
 $.getScript("https://malsup.github.io/jquery.form.js");
 
-let apiURL = "https://edm-vyshj.ondigitalocean.app"
+let apiURL = "https://api.soundxpo.com"
 // let apiURL = "http://localhost:8080"
 
 function post(url, data, callback) {
