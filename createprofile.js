@@ -54,8 +54,3 @@ $(".btn__artist").click(function () {
   }
   post(url, data, callback);
 });
-
-
-//window.location.replace("/artists/" + id + "?c=1");
-
-

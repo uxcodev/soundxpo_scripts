@@ -196,7 +196,7 @@ $(".btn__claim__profile").click(function () {
 
 function getArtistId() {
 
-  let url = `${apiURL}/webflow/get-id-by-slug`
+  let url = `${apiURL}/webflow/get-id-by-slug`;
 
   let data = {
     collection_id: "620536720c96daeda710d568",
@@ -264,5 +264,3 @@ if (artist_member_id && member_id < 1) {
 } else {
   $(".btn__claim__profile").hide()
 }
-
-console.log("artists_template.js")
