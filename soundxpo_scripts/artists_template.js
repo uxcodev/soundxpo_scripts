@@ -265,4 +265,4 @@ if (artist_member_id && member_id < 1) {
   $(".btn__claim__profile").hide()
 }
 
-console.log("artists_template")
+console.log("artists_template.js")
