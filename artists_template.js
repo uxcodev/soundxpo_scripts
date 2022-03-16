@@ -66,15 +66,10 @@ function createdEmbedForm() {
 
     var site = s
 
-    // console.log(width)
-    // console.log(height)
-    // console.log(site)
-
     $('#width').val(width)
     $('#height').val(height)
     $('#site').val(site)
 
-    // console.log("parseEmbed");
   };
 
   /* ADD EMBED - API */
@@ -152,10 +147,9 @@ form__editprofile.submit(function (e) {
   form__editprofile = $(e.target);
 
   var url = `${apiURL}/webflow/edit-profile`;
-  // var url = `${localURL}/webflow/edit-profile`;
 
   let success = (msg) => {
-    window.location.replace(`/artists/${data.slug}`);
+    window.location.replace(`/artists/${data.slug}`);  // ENABLE FOR PROD
     // window.location.reload();
   }
   let fail = (err) => {
@@ -174,9 +168,7 @@ form__editprofile.submit(function (e) {
 });
 
 $(".btn__claim__profile").click(function () {
-  // console.log(member_id)
-  // console.log(artist_id)
-  // console.log(artist_slug)
+
 
   let url = `${apiURL}/webflow/claim-profile`;
 
@@ -206,6 +198,7 @@ function getArtistId() {
     artist_id = id
     updateArtistId(id)
   }
+
   let fail = (err) => {
     console.log(err)
   }
@@ -213,7 +206,6 @@ function getArtistId() {
 }
 
 function updateArtistId(id) {
-
 
   let url = `${apiURL}/webflow//update-artist-id`
   let data = {
@@ -233,7 +225,6 @@ $(".btn__get__id").click(function () {
 })
 
 if (!artist_id) {
-  // console.log("getArtistId()")
   getArtistId()
 }
 
@@ -258,9 +249,164 @@ function setBioMore() {
 
 setBioMore()
 
-if (artist_member_id && member_id < 1) {
-  console.log("unclaimed profile")
+if (artist_member_id && !(member_id > 1)) {
   $(".btn__claim__profile").show()
 } else {
   $(".btn__claim__profile").hide()
 }
+
+//temporarily allow anyone to submit changes 
+$(".section__artist__edit").hide();
+$(".btn__artist__edit").click(function () {
+  $(".section__artist__view").hide();
+  $(".section__artist__edit").show();
+});
+
+//set gender default to 'Unspecified'
+$("input[name=Gender][value=Unspecified]").prop('checked', true);
+
+let getUrlParameter = function getUrlParameter(sParam) {
+  let sPageURL = window.location.search.substring(1),
+    sURLVariables = sPageURL.split('&'),
+    sParameterName,
+    i;
+
+  for (i = 0; i < sURLVariables.length; i++) {
+    sParameterName = sURLVariables[i].split('=');
+
+    if (sParameterName[0] === sParam) {
+      return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+    }
+  }
+  return false;
+};
+
+$(document).ready(function () {
+
+  let url__create = getUrlParameter('c');
+  let url__artist_id = getUrlParameter('id');
+
+  if (url__artist_id && url__create) {
+
+    // the artist_id variable will be added to the form input on submit
+    artist_id = url__artist_id
+
+  }
+  else if (!artist_id || artist_id === "new") {
+
+    // if new artist get ID from the CMS and assign to artist_id
+    getArtistId()
+  }
+
+  if (url__create == 1) {
+    $(".section__artist__view").hide();
+    $(".section__artist__edit").show();
+  }
+  if (member_id === artist_member_id) {
+    $(".btn__addembed").show()
+    $(".btn__artist__edit").show()
+    $(".btn__artist__edit").click(function () {
+      $(".section__artist__view").hide();
+      $(".section__artist__edit").show();
+    });
+  }
+  else {
+    $(".btn__addembed").hide()
+    $(".btn__artist__edit").hide()
+  }
+
+  // Claim profile
+
+  if (artist_member_id.length < 8 && member_id) {
+    $(".btn__claim__profile").show()
+  } else {
+    $(".btn__claim__profile").hide()
+  }
+
+  // Populate the form with current data
+
+  var cms__genres = []
+
+  $(".cms__genre").each(function (i, item) {
+    var genre = $(this).text();
+    cms__genres.push(genre);
+  });
+
+  var cms__tags = []
+
+  $(".cms__tag").each(function (i, item) {
+    var tag = $(this).html();
+    cms__tags.push(tag);
+  });
+  $(".cb__genre").each(function (i, item) {
+    var genre = $(this).next().text();
+    if ($.inArray(genre, cms__genres) > -1) {
+      $("#" + item.id).prop('checked', true);
+    } else {
+    }
+  });
+
+  var cms__type = $(".cms__type").text();
+  if (cms__type == "Producer") {
+    $(".rb__producer").prop("checked", true);
+  }
+  if (cms__type == "DJ & Producer") {
+    $(".rb__djproducer").prop("checked", true);
+  }
+  else {
+    $(".rb__dj").prop("checked", true);
+  }
+
+  var cms__gender = $(".cms__gender").text();
+  $(".rb__gender").each(function (i, item) {
+    var gender = $(this).next().text();
+    if (gender == cms__gender) {
+      $("#" + item.id).prop("checked", true);
+    }
+  });
+});
+
+function addGenres() {
+  let checked = [];
+  $("#subgenreslist").val("");
+  $(".cb__genre:checked").each(function (index, element) {
+    let id = $(element).data('id')
+    //checked.push(`"${id}"`)
+    checked.push(id)
+  })
+  let list = checked
+  //$("#subgenreslist").val(list)
+  $("#subgenreslist").val(checked)
+}
+
+function addTags() {
+  $(".cms__tag").each(function (index, element) {
+    text = $("#tags").val()
+    if (text != "") {
+      comma = ", "
+    } else {
+      comma = ""
+    }
+    addtag = $(this).html()
+    $("#tags").val(text + comma + addtag)
+  })
+}
+
+$(document).ready(function () {
+  let checked = document.getElementById('active').checked
+  if (active && !checked) {
+    $(".toggle").click()
+  }
+  addGenres()
+  addTags()
+});
+
+
+Webflow.push(function () {
+  // Disable submitting form fields during development
+  $('form').submit(function () {
+    return false;
+  });
+});
+
+

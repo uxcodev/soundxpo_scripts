@@ -21,7 +21,7 @@ function post(url, data, cb) {
   });
 }
 
-$(".btn__artist").click(function () {
+$(".btn__createprofile").click(function () {
 
   let url = `${apiURL}/webflow/create-artist`;
 
